@@ -29,7 +29,8 @@ app.get('/weather', async (req, res, next) => {
     }
     const { lat, lon, placeName } = await makeMapboxApiRequest(address);
 
-    const weatherInfo = await makeWeatherApiRequest(lat, lon);
+    // const weatherInfo = await makeWeatherApiRequest(lat, lon);
+    const weatherInfo = { noCurrentInfo: 'toSaveFreeRequests' };
 
     res
       .status(200)
@@ -55,11 +56,13 @@ app.use(async (err, req, res, next) => {
     .json({
       status: 'Internal server error',
       code: 500,
-      err
+      err,
     })
     .end();
 });
 
-app.listen(3000, () => {
-  console.log(`Server running on port 3000`);
+const port = process.env.PORT;
+
+app.listen(port, () => {
+  console.log(`Server running on port ${port}`);
 });
